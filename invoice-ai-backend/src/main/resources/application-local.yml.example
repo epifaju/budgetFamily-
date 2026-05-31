@@ -1,0 +1,11 @@
+# Copiez ce fichier vers application-local.yml (gitignoré) :
+#   cp application-local.yml.example application-local.yml
+#
+# Ne commitez jamais application-local.yml.
+
+spring:
+  datasource:
+    password: CHANGE_ME_POSTGRES_PASSWORD
+
+jwt:
+  secret: CHANGE_ME_JWT_SECRET_MIN_32_CHARS

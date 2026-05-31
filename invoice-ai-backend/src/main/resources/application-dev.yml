@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5435/invoiceai_db}
+
+logging:
+  level:
+    root: INFO
+    com.invoiceai: DEBUG

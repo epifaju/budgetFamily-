@@ -1,0 +1,15 @@
+# Maven build output
+target/
+
+# Local Spring Boot overrides (passwords, JWT secrets, etc.)
+src/main/resources/application-local.yml
+src/main/resources/application-local.yaml
+src/main/resources/application-local.properties
+src/main/resources/application-secrets.yml
+src/main/resources/application-secrets.yaml
+src/main/resources/application-secrets.properties
+
+# Environment files
+.env
+.env.*
+!.env.example

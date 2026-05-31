@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: invoice-ai-backend
+
+  config:
+    import: optional:classpath:application-local.yml
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5435/invoiceai_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+jwt:
+  access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION:900000}
+  refresh-token-expiration: ${JWT_REFRESH_TOKEN_EXPIRATION:2592000000}
+
+server:
+  port: ${SERVER_PORT:8085}
+  address: 0.0.0.0  # Écouter sur toutes les interfaces réseau pour permettre l'accès depuis l'appareil mobile
+  error:
+    include-message: always
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    com.invoiceai: DEBUG
+
+

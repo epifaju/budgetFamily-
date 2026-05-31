@@ -1,0 +1,132 @@
+# =============================================================================
+# Budget Family — Protection des secrets et fichiers sensibles
+# =============================================================================
+
+# --- Variables d'environnement ---
+.env
+.env.*
+!.env.example
+!.env.template
+!.env.sample
+*.env.local
+
+# --- Clés, certificats et credentials ---
+**/secrets/
+**/credentials/
+**/credential*/
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+!**/debug.keystore
+id_rsa
+id_rsa.*
+*.asc
+*.gpg
+*.crt
+*.cer
+service-account*.json
+*-credentials.json
+credentials.json
+auth.json
+token.json
+.npmrc
+.netrc
+
+# --- Fournisseurs cloud ---
+.aws/
+.gcp/
+.azure/
+azure-profile.json
+
+# --- Firebase / Google (mobile) ---
+**/google-services.json
+**/GoogleService-Info.plist
+firebase-adminsdk*.json
+
+# --- Spring Boot — overrides locaux (mots de passe, JWT, etc.) ---
+**/application-local.yml
+**/application-local.yaml
+**/application-local.properties
+**/application-secrets.yml
+**/application-secrets.yaml
+**/application-secrets.properties
+**/application-*.local.yml
+**/application-*.local.yaml
+**/application-*.local.properties
+
+# --- Docker — configs locales avec secrets ---
+docker-compose.override.yml
+docker-compose.local.yml
+docker-compose.*.local.yml
+.secrets/
+
+# --- Bases de données locales / dumps ---
+*.sql.backup
+*.sql.gz
+*.dump
+*.sqlite
+*.sqlite3
+*.db-journal
+
+# --- Backend Java / Maven ---
+invoice-ai-backend/target/
+invoice-ai-backend/.mvn/wrapper/maven-wrapper.jar
+*.class
+*.jar
+!**/gradle-wrapper.jar
+hs_err_pid*
+replay_pid*
+
+# --- Frontend React Native / Node ---
+**/node_modules/
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/.pnpm-debug.log*
+
+# --- Android ---
+**/local.properties
+**/.gradle/
+**/build/
+**/.cxx/
+*.hprof
+*.iml
+
+# --- iOS / Xcode ---
+**/ios/Pods/
+**/ios/build/
+**/DerivedData/
+**/*.xcuserstate
+**/ios/.xcode.env.local
+**/*.ipa
+
+# --- IDE (peut contenir des chemins ou credentials) ---
+.idea/
+.idea/dataSources/
+.idea/dataSources.local.xml
+*.iws
+.vscode/launch.json
+.vscode/tasks.json
+*.code-workspace
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- Logs et rapports ---
+*.log
+logs/
+**/coverage/
+**/.nyc_output/
+
+# --- Fichiers temporaires / cache ---
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.cache/
