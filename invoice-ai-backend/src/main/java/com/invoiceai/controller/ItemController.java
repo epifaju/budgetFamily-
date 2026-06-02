@@ -24,13 +24,13 @@ public class ItemController {
     private final FeedbackService feedbackService;
 
     @PutMapping("/{id}")
-    public ResponseEntity<ItemResponse> updateItem(@PathVariable UUID id, @Valid @RequestBody ItemResponse payload) {
+    public ResponseEntity<ItemResponse> updateItem(@PathVariable("id") UUID id, @Valid @RequestBody ItemResponse payload) {
         ItemResponse response = itemService.updateItem(id, payload);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{id}/feedback")
-    public ResponseEntity<Void> submitFeedback(@PathVariable UUID id, @Valid @RequestBody FeedbackRequest request) {
+    public ResponseEntity<Void> submitFeedback(@PathVariable("id") UUID id, @Valid @RequestBody FeedbackRequest request) {
         feedbackService.submitFeedback(id, request);
         return ResponseEntity.noContent().build();
     }

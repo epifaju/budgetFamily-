@@ -44,6 +44,9 @@ public class CreateInvoiceRequest {
 
     private BigDecimal confidenceScore;
 
+    /** Identifiant SQLite côté mobile — utilisé pour corréler la réponse batch, non persisté. */
+    private String clientLocalId;
+
     @Valid
     @NotEmpty
     private List<ItemRequest> items;

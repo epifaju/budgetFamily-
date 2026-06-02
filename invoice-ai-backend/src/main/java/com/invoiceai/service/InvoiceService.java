@@ -8,6 +8,7 @@ import com.invoiceai.dto.request.SyncBatchRequest;
 import com.invoiceai.dto.request.UpdateInvoiceRequest;
 import com.invoiceai.dto.response.InvoiceResponse;
 import com.invoiceai.dto.response.ItemResponse;
+import com.invoiceai.dto.response.SyncBatchItemResult;
 import com.invoiceai.dto.response.SyncResponse;
 import com.invoiceai.exception.ResourceNotFoundException;
 import com.invoiceai.repository.InvoiceRepository;
@@ -125,18 +126,35 @@ public class InvoiceService {
     }
 
     public SyncResponse syncBatch(SyncBatchRequest request, UUID userId) {
+        List<SyncBatchItemResult> results = new ArrayList<>();
         List<InvoiceResponse> syncedInvoices = new ArrayList<>();
         List<String> errors = new ArrayList<>();
-        request.getInvoices().forEach(invoiceRequest -> {
+        int synced = 0;
+        int failed = 0;
+
+        for (CreateInvoiceRequest invoiceRequest : request.getInvoices()) {
+            SyncBatchItemResult.SyncBatchItemResultBuilder resultBuilder = SyncBatchItemResult.builder()
+                .clientLocalId(invoiceRequest.getClientLocalId());
             try {
-                syncedInvoices.add(create(invoiceRequest, userId));
+                InvoiceResponse created = create(invoiceRequest, userId);
+                resultBuilder.success(true).invoice(created);
+                syncedInvoices.add(created);
+                synced += 1;
             } catch (Exception exception) {
-                errors.add(exception.getMessage());
+                String message = exception.getMessage() != null
+                    ? exception.getMessage()
+                    : "Erreur lors de la synchronisation";
+                resultBuilder.success(false).error(message);
+                errors.add(message);
+                failed += 1;
             }
-        });
+            results.add(resultBuilder.build());
+        }
+
         return SyncResponse.builder()
-            .synced(syncedInvoices.size())
-            .failed(errors.size())
+            .synced(synced)
+            .failed(failed)
+            .results(results)
             .invoices(syncedInvoices)
             .errors(errors)
             .build();

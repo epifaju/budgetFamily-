@@ -9,3 +9,11 @@ spring:
 
 jwt:
   secret: CHANGE_ME_JWT_SECRET_MIN_32_CHARS
+
+# Analyse IA des tickets (OpenAI ou API compatible)
+ocr:
+  ai:
+    enabled: false
+    api-key: CHANGE_ME_OPENAI_API_KEY
+    # base-url: https://api.openai.com/v1
+    # model: gpt-4o-mini

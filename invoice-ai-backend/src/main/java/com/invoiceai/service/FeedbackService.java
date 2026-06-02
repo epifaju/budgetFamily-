@@ -31,6 +31,8 @@ public class FeedbackService {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new ResourceNotFoundException("Utilisateur introuvable"));
 
+        CategoryType originalCategory = item.getCategory();
+
         item.setCategory(request.getCorrectedCategory());
         item.setIsCorrected(true);
         itemRepository.save(item);
@@ -38,7 +40,7 @@ public class FeedbackService {
         Feedback feedback = Feedback.builder()
             .item(item)
             .user(user)
-            .originalCategory(item.getCategory())
+            .originalCategory(originalCategory)
             .correctedCategory(request.getCorrectedCategory())
             .build();
         feedbackRepository.save(feedback);

@@ -1,6 +1,5 @@
 package com.invoiceai.dto.response;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,15 +11,10 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SyncResponse {
+public class SyncBatchItemResult {
 
-    private int synced;
-    private int failed;
-    private List<SyncBatchItemResult> results;
-    private List<InvoiceResponse> invoices;
-    private List<String> errors;
+    private String clientLocalId;
+    private boolean success;
+    private InvoiceResponse invoice;
+    private String error;
 }
-
-
-
-

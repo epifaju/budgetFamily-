@@ -43,4 +43,11 @@ logging:
   level:
     com.invoiceai: DEBUG
 
-
+ocr:
+  ai:
+    enabled: ${OCR_AI_ENABLED:false}
+    api-key: ${OCR_AI_API_KEY:}
+    base-url: ${OCR_AI_BASE_URL:https://api.openai.com/v1}
+    model: ${OCR_AI_MODEL:gpt-4o-mini}
+    timeout-ms: ${OCR_AI_TIMEOUT_MS:30000}
+    max-text-length: ${OCR_AI_MAX_TEXT_LENGTH:12000}

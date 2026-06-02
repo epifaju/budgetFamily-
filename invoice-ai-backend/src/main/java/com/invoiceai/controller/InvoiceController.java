@@ -37,9 +37,9 @@ public class InvoiceController {
 
     @GetMapping
     public ResponseEntity<Page<InvoiceResponse>> listInvoices(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "20") int size,
-        @RequestParam(defaultValue = "date,desc") String sort
+        @RequestParam(name = "page", defaultValue = "0") int page,
+        @RequestParam(name = "size", defaultValue = "20") int size,
+        @RequestParam(name = "sort", defaultValue = "date,desc") String sort
     ) {
         UUID userId = SecurityUtils.getCurrentUserId();
         Pageable pageable = PageRequest.of(page, size, parseSort(sort));
@@ -48,7 +48,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InvoiceResponse> getInvoice(@PathVariable UUID id) {
+    public ResponseEntity<InvoiceResponse> getInvoice(@PathVariable("id") UUID id) {
         UUID userId = SecurityUtils.getCurrentUserId();
         return ResponseEntity.ok(invoiceService.findById(id, userId));
     }
@@ -62,7 +62,7 @@ public class InvoiceController {
 
     @PutMapping("/{id}")
     public ResponseEntity<InvoiceResponse> updateInvoice(
-        @PathVariable UUID id,
+        @PathVariable("id") UUID id,
         @Valid @RequestBody UpdateInvoiceRequest request
     ) {
         UUID userId = SecurityUtils.getCurrentUserId();
@@ -71,7 +71,7 @@ public class InvoiceController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteInvoice(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteInvoice(@PathVariable("id") UUID id) {
         UUID userId = SecurityUtils.getCurrentUserId();
         invoiceService.delete(id, userId);
         return ResponseEntity.noContent().build();
