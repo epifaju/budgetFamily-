@@ -1,16 +1,42 @@
 spring:
+  profiles:
+    active: prod
+
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+app:
+  uploads:
+    directory: ${APP_UPLOADS_DIR:/var/invoiceai/uploads}
+    public-base-url: ${APP_UPLOADS_PUBLIC_BASE_URL}
+
 jwt:
   secret: ${JWT_SECRET}
+
+server:
+  port: ${SERVER_PORT:8085}
+  address: 0.0.0.0
+  forward-headers-strategy: framework
+
+# OCR IA : OCR_AI_ENABLED=true, OCR_AI_API_KEY=sk-...
 
 logging:
   level:
     root: WARN
     com.invoiceai: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
 
 
 

@@ -1,9 +1,9 @@
 package com.invoiceai.dto.request;
 
-import com.invoiceai.validation.PasswordPolicy;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import com.invoiceai.validation.PasswordPolicy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,10 +15,10 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChangePasswordRequest {
+public class ResetPasswordRequest {
 
     @NotBlank
-    private String currentPassword;
+    private String token;
 
     @NotBlank
     @Size(min = 8)

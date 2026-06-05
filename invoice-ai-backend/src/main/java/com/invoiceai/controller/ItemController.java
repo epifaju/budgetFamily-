@@ -2,6 +2,7 @@ package com.invoiceai.controller;
 
 import com.invoiceai.dto.request.FeedbackRequest;
 import com.invoiceai.dto.response.ItemResponse;
+import com.invoiceai.exception.ValidationException;
 import com.invoiceai.service.FeedbackService;
 import com.invoiceai.service.ItemService;
 import jakarta.validation.Valid;
@@ -31,6 +32,9 @@ public class ItemController {
 
     @PostMapping("/{id}/feedback")
     public ResponseEntity<Void> submitFeedback(@PathVariable("id") UUID id, @Valid @RequestBody FeedbackRequest request) {
+        if (!id.equals(request.getItemId())) {
+            throw new ValidationException("L'identifiant article ne correspond pas");
+        }
         feedbackService.submitFeedback(id, request);
         return ResponseEntity.noContent().build();
     }

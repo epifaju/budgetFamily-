@@ -8,6 +8,7 @@ import com.invoiceai.exception.ResourceNotFoundException;
 import com.invoiceai.exception.UnauthorizedException;
 import com.invoiceai.repository.UserRepository;
 import com.invoiceai.security.SecurityUtils;
+import com.invoiceai.validation.PasswordPolicy;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,6 +42,7 @@ public class UserService {
             throw new UnauthorizedException("Mot de passe actuel incorrect");
         }
 
+        PasswordPolicy.validate(request.getNewPassword());
         user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
     }

@@ -2,8 +2,9 @@ spring:
   application:
     name: invoice-ai-backend
 
-  config:
-    import: optional:classpath:application-local.yml
+  # Profil « local » → charge application-local.yml (secrets dev, OCR IA, etc.)
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
 
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5435/invoiceai_db}
@@ -23,13 +24,23 @@ spring:
     enabled: true
     baseline-on-migrate: true
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+app:
+  uploads:
+    directory: ${APP_UPLOADS_DIR:./uploads}
+    public-base-url: ${APP_UPLOADS_PUBLIC_BASE_URL:}
+
 jwt:
   access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION:900000}
   refresh-token-expiration: ${JWT_REFRESH_TOKEN_EXPIRATION:2592000000}
 
 server:
   port: ${SERVER_PORT:8085}
-  address: 0.0.0.0  # Écouter sur toutes les interfaces réseau pour permettre l'accès depuis l'appareil mobile
+  address: 0.0.0.0 # Écouter sur toutes les interfaces réseau pour permettre l'accès depuis l'appareil mobile
   error:
     include-message: always
 
@@ -43,11 +54,6 @@ logging:
   level:
     com.invoiceai: DEBUG
 
-ocr:
-  ai:
-    enabled: ${OCR_AI_ENABLED:false}
-    api-key: ${OCR_AI_API_KEY:}
-    base-url: ${OCR_AI_BASE_URL:https://api.openai.com/v1}
-    model: ${OCR_AI_MODEL:gpt-4o-mini}
-    timeout-ms: ${OCR_AI_TIMEOUT_MS:30000}
-    max-text-length: ${OCR_AI_MAX_TEXT_LENGTH:12000}
+# OCR IA : ne pas définir ici (sinon écrase application-local.yml).
+# Dev  → application-local.yml (ocr.ai.enabled + ocr.ai.api-key)
+# Prod → variables d'environnement OCR_AI_ENABLED, OCR_AI_API_KEY, etc.

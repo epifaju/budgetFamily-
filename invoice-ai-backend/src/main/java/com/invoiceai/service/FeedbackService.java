@@ -3,6 +3,7 @@ package com.invoiceai.service;
 import com.invoiceai.domain.Feedback;
 import com.invoiceai.domain.Item;
 import com.invoiceai.domain.User;
+import com.invoiceai.domain.enums.CategoryType;
 import com.invoiceai.dto.request.FeedbackRequest;
 import com.invoiceai.exception.ResourceNotFoundException;
 import com.invoiceai.repository.FeedbackRepository;

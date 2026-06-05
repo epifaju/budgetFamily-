@@ -2,7 +2,9 @@ package com.invoiceai.controller;
 
 import com.invoiceai.dto.request.ChangePasswordRequest;
 import com.invoiceai.dto.request.UpdateProfileRequest;
+import com.invoiceai.dto.response.UserDataExportResponse;
 import com.invoiceai.dto.response.UserResponse;
+import com.invoiceai.service.UserDataExportService;
 import com.invoiceai.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final UserDataExportService userDataExportService;
 
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getProfile() {
@@ -35,6 +38,11 @@ public class UserController {
     public ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
         userService.changePassword(request);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me/export")
+    public ResponseEntity<UserDataExportResponse> exportMyData() {
+        return ResponseEntity.ok(userDataExportService.exportCurrentUser());
     }
 
     @DeleteMapping("/me")

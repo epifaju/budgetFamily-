@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.invoiceai.validation.PasswordPolicy;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final LoginRateLimiterService loginRateLimiterService;
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
@@ -32,10 +34,13 @@ public class AuthService {
             throw new ValidationException("Email déjà utilisé");
         }
 
+        PasswordPolicy.validate(request.getPassword());
+
         User user = User.builder()
             .email(request.getEmail().toLowerCase())
             .passwordHash(passwordEncoder.encode(request.getPassword()))
             .name(request.getName())
+            .privacyConsentAt(LocalDateTime.now())
             .build();
 
         User savedUser = userRepository.save(user);
@@ -45,13 +50,18 @@ public class AuthService {
 
     @Transactional
     public AuthResponse login(LoginRequest request) {
-        User user = userRepository.findByEmail(request.getEmail().toLowerCase())
+        String email = request.getEmail().toLowerCase();
+        loginRateLimiterService.checkAllowed(email);
+
+        User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UnauthorizedException("Email ou mot de passe incorrect"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+            loginRateLimiterService.recordFailure(email);
             throw new UnauthorizedException("Email ou mot de passe incorrect");
         }
 
+        loginRateLimiterService.clearFailures(email);
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);
 

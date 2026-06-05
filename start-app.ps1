@@ -284,6 +284,7 @@ if (-not $MobileOnly) {
             exit 1
         }
         Write-Ok "Backend déjà en cours d'exécution, démarrage ignoré"
+        Write-Warn "Si vous avez modifié application-local.yml (OCR IA, JWT, etc.), redémarrez le backend manuellement."
     }
     else {
         Start-ProcessWindow -Title 'InvoiceAI Backend' -WorkingDirectory $BackendDir -Command 'mvn spring-boot:run'

@@ -9,6 +9,9 @@ src/main/resources/application-secrets.yml
 src/main/resources/application-secrets.yaml
 src/main/resources/application-secrets.properties
 
+# Uploaded receipt images (dev)
+uploads/
+
 # Environment files
 .env
 .env.*

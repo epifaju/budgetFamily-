@@ -1,6 +1,8 @@
 # Copiez ce fichier vers application-local.yml (gitignoré) :
 #   cp application-local.yml.example application-local.yml
 #
+# Ce fichier est chargé automatiquement avec le profil Spring « local »
+# (activé par défaut en dev via application.yml).
 # Ne commitez jamais application-local.yml.
 
 spring:
@@ -11,9 +13,17 @@ jwt:
   secret: CHANGE_ME_JWT_SECRET_MIN_32_CHARS
 
 # Analyse IA des tickets (OpenAI ou API compatible)
+# enabled: true + api-key obligatoires pour le bouton « Réanalyser avec l'IA »
+# Images tickets (dev local). Sur téléphone WiFi, utilisez l'IP du PC :
+# public-base-url: http://192.168.x.x:8085/uploads
+app:
+  uploads:
+    directory: ./uploads
+    public-base-url:
+
 ocr:
   ai:
-    enabled: false
+    enabled: true
     api-key: CHANGE_ME_OPENAI_API_KEY
     # base-url: https://api.openai.com/v1
     # model: gpt-4o-mini

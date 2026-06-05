@@ -1,10 +1,14 @@
 package com.invoiceai.controller;
 
+import com.invoiceai.dto.request.ForgotPasswordRequest;
 import com.invoiceai.dto.request.LoginRequest;
 import com.invoiceai.dto.request.RefreshTokenRequest;
 import com.invoiceai.dto.request.RegisterRequest;
+import com.invoiceai.dto.request.ResetPasswordRequest;
 import com.invoiceai.dto.response.AuthResponse;
+import com.invoiceai.dto.response.MessageResponse;
 import com.invoiceai.service.AuthService;
+import com.invoiceai.service.PasswordResetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final PasswordResetService passwordResetService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
@@ -46,6 +51,22 @@ public class AuthController {
             authService.logout(authorizationHeader.substring(7));
         }
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<MessageResponse> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        passwordResetService.requestReset(request.getEmail());
+        return ResponseEntity.ok(MessageResponse.builder()
+            .message("Si cet email est enregistré, un code de réinitialisation a été envoyé.")
+            .build());
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<MessageResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        passwordResetService.resetPassword(request.getToken(), request.getNewPassword());
+        return ResponseEntity.ok(MessageResponse.builder()
+            .message("Mot de passe mis à jour. Vous pouvez vous connecter.")
+            .build());
     }
 }
 
