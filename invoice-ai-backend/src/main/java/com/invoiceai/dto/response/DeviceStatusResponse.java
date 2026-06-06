@@ -12,14 +12,12 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrorResponse {
+public class DeviceStatusResponse {
 
-    private int status;
-    private String code;
-    private String message;
-    private LocalDateTime timestamp;
+    private String deviceId;
+    private boolean registered;
+    private boolean canSync;
+    private boolean premium;
+    private int activeDeviceCount;
+    private LocalDateTime lastSeenAt;
 }
-
-
-
-

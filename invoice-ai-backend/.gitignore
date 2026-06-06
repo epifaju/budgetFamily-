@@ -12,6 +12,10 @@ src/main/resources/application-secrets.properties
 # Uploaded receipt images (dev)
 uploads/
 
+# Firebase service account (FCM HTTP v1)
+firebase-service-account.json
+**/firebase-service-account*.json
+
 # Environment files
 .env
 .env.*

@@ -26,6 +26,11 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ErrorResponse> handleForbidden(ForbiddenException exception) {
+        return buildErrorResponse(HttpStatus.FORBIDDEN, exception.getCode(), exception.getMessage());
+    }
+
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ErrorResponse> handleUnauthorized(UnauthorizedException exception) {
         return buildErrorResponse(HttpStatus.UNAUTHORIZED, exception.getMessage());
@@ -88,8 +93,13 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<ErrorResponse> buildErrorResponse(HttpStatus status, String message) {
+        return buildErrorResponse(status, null, message);
+    }
+
+    private ResponseEntity<ErrorResponse> buildErrorResponse(HttpStatus status, String code, String message) {
         ErrorResponse body = ErrorResponse.builder()
             .status(status.value())
+            .code(code)
             .message(message)
             .timestamp(LocalDateTime.now())
             .build();

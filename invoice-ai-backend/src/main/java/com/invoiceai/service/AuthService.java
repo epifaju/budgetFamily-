@@ -1,6 +1,7 @@
 package com.invoiceai.service;
 
 import com.invoiceai.domain.User;
+import com.invoiceai.dto.request.DeviceInfoRequest;
 import com.invoiceai.dto.request.LoginRequest;
 import com.invoiceai.dto.request.RefreshTokenRequest;
 import com.invoiceai.dto.request.RegisterRequest;
@@ -27,6 +28,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final LoginRateLimiterService loginRateLimiterService;
+    private final DeviceService deviceService;
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
@@ -44,6 +46,7 @@ public class AuthService {
             .build();
 
         User savedUser = userRepository.save(user);
+        registerDeviceIfPresent(savedUser.getId(), request.getDevice());
         return buildAuthResponse(savedUser, jwtTokenProvider.generateAccessToken(savedUser),
             jwtTokenProvider.generateRefreshToken(savedUser));
     }
@@ -65,6 +68,7 @@ public class AuthService {
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);
 
+        registerDeviceIfPresent(user.getId(), request.getDevice());
         return buildAuthResponse(user, jwtTokenProvider.generateAccessToken(user),
             jwtTokenProvider.generateRefreshToken(user));
     }
@@ -85,6 +89,13 @@ public class AuthService {
 
     public void logout(String token) {
         // Stateless JWT: token blacklist can be implemented later if needed.
+    }
+
+    private void registerDeviceIfPresent(UUID userId, DeviceInfoRequest device) {
+        if (device == null || device.getDeviceId() == null || device.getDeviceId().isBlank()) {
+            return;
+        }
+        deviceService.registerDevice(userId, device);
     }
 
     private AuthResponse buildAuthResponse(User user, String accessToken, String refreshToken) {

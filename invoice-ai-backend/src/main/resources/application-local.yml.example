@@ -21,6 +21,11 @@ app:
     directory: ./uploads
     public-base-url:
 
+  # Push FCM HTTP v1 (recommandé — ne pas utiliser l'API Legacy)
+  firebase:
+    project-id: budget-family-47eec
+    service-account-path: ./firebase-service-account.json
+
 ocr:
   ai:
     enabled: true

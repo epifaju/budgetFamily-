@@ -1,9 +1,7 @@
 package com.invoiceai.dto.request;
 
-import com.invoiceai.dto.request.DeviceInfoRequest;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,19 +13,15 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequest {
-
-    @Email
-    @NotBlank
-    private String email;
+public class DeviceInfoRequest {
 
     @NotBlank
-    private String password;
+    @Size(max = 128)
+    private String deviceId;
 
-    @Valid
-    private DeviceInfoRequest device;
+    @Size(max = 255)
+    private String deviceName;
+
+    @Size(max = 32)
+    private String platform;
 }
-
-
-
-

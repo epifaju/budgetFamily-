@@ -1,6 +1,5 @@
 package com.invoiceai.dto.response;
 
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,14 +11,8 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrorResponse {
+public class SubscriptionStatusResponse {
 
-    private int status;
-    private String code;
-    private String message;
-    private LocalDateTime timestamp;
+    private boolean premium;
+    private String source;
 }
-
-
-
-

@@ -41,10 +41,12 @@ token.json
 .azure/
 azure-profile.json
 
-# --- Firebase / Google (mobile) ---
+# --- Firebase / Google (mobile + backend) ---
 **/google-services.json
 **/GoogleService-Info.plist
-firebase-adminsdk*.json
+*firebase-adminsdk*.json
+**/budget-family-*-firebase-adminsdk*.json
+firebase-service-account.json
 
 # --- Spring Boot — overrides locaux (mots de passe, JWT, etc.) ---
 **/application-local.yml

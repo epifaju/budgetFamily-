@@ -2,9 +2,12 @@ package com.invoiceai.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -22,20 +25,25 @@ import org.hibernate.annotations.UpdateTimestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "push_tokens")
+public class PushToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+    @Column(nullable = false, length = 512)
+    private String token;
 
-    private String name;
+    @Column(length = 32)
+    private String platform;
+
+    @Column(name = "device_id", length = 128)
+    private String deviceId;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -44,21 +52,4 @@ public class User {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @Column(name = "last_login")
-    private LocalDateTime lastLogin;
-
-    @Column(name = "privacy_consent_at")
-    private LocalDateTime privacyConsentAt;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private boolean premium = false;
-
-    @Column(name = "premium_synced_at")
-    private LocalDateTime premiumSyncedAt;
 }
-
-
-
-

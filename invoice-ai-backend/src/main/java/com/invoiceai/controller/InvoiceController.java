@@ -6,6 +6,7 @@ import com.invoiceai.dto.request.UpdateInvoiceRequest;
 import com.invoiceai.dto.response.InvoiceResponse;
 import com.invoiceai.dto.response.SyncResponse;
 import com.invoiceai.security.SecurityUtils;
+import com.invoiceai.service.DeviceService;
 import com.invoiceai.service.InvoiceService;
 import com.invoiceai.service.SyncService;
 import jakarta.validation.Valid;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,14 +36,17 @@ public class InvoiceController {
 
     private final InvoiceService invoiceService;
     private final SyncService syncService;
+    private final DeviceService deviceService;
 
     @GetMapping
     public ResponseEntity<Page<InvoiceResponse>> listInvoices(
+        @RequestHeader(name = DeviceService.HEADER_DEVICE_ID, required = false) String deviceId,
         @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "20") int size,
         @RequestParam(name = "sort", defaultValue = "date,desc") String sort
     ) {
         UUID userId = SecurityUtils.getCurrentUserId();
+        deviceService.assertSyncAllowed(userId, deviceId);
         Pageable pageable = PageRequest.of(page, size, parseSort(sort));
         Page<InvoiceResponse> response = invoiceService.findAllByUserId(userId, pageable);
         return ResponseEntity.ok(response);
@@ -54,32 +59,46 @@ public class InvoiceController {
     }
 
     @PostMapping
-    public ResponseEntity<InvoiceResponse> createInvoice(@Valid @RequestBody CreateInvoiceRequest request) {
+    public ResponseEntity<InvoiceResponse> createInvoice(
+        @RequestHeader(name = DeviceService.HEADER_DEVICE_ID, required = false) String deviceId,
+        @Valid @RequestBody CreateInvoiceRequest request
+    ) {
         UUID userId = SecurityUtils.getCurrentUserId();
+        deviceService.assertSyncAllowed(userId, deviceId);
         InvoiceResponse response = invoiceService.create(request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<InvoiceResponse> updateInvoice(
+        @RequestHeader(name = DeviceService.HEADER_DEVICE_ID, required = false) String deviceId,
         @PathVariable("id") UUID id,
         @Valid @RequestBody UpdateInvoiceRequest request
     ) {
         UUID userId = SecurityUtils.getCurrentUserId();
+        deviceService.assertSyncAllowed(userId, deviceId);
         InvoiceResponse response = invoiceService.update(id, request, userId);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteInvoice(@PathVariable("id") UUID id) {
+    public ResponseEntity<Void> deleteInvoice(
+        @RequestHeader(name = DeviceService.HEADER_DEVICE_ID, required = false) String deviceId,
+        @PathVariable("id") UUID id
+    ) {
         UUID userId = SecurityUtils.getCurrentUserId();
+        deviceService.assertSyncAllowed(userId, deviceId);
         invoiceService.delete(id, userId);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/batch")
-    public ResponseEntity<SyncResponse> syncBatch(@Valid @RequestBody SyncBatchRequest request) {
+    public ResponseEntity<SyncResponse> syncBatch(
+        @RequestHeader(name = DeviceService.HEADER_DEVICE_ID, required = false) String deviceId,
+        @Valid @RequestBody SyncBatchRequest request
+    ) {
         UUID userId = SecurityUtils.getCurrentUserId();
+        deviceService.assertSyncAllowed(userId, deviceId);
         SyncResponse response = syncService.syncInvoices(request, userId);
         return ResponseEntity.ok(response);
     }
@@ -92,7 +111,4 @@ public class InvoiceController {
         return Sort.by(sortParts[0]).ascending();
     }
 }
-
-
-
 

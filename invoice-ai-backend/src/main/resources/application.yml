@@ -33,6 +33,14 @@ app:
   uploads:
     directory: ${APP_UPLOADS_DIR:./uploads}
     public-base-url: ${APP_UPLOADS_PUBLIC_BASE_URL:}
+    subscription:
+    revenuecat-secret-api-key: ${REVENUECAT_SECRET_API_KEY:}
+    revenuecat-entitlement: ${REVENUECAT_ENTITLEMENT:premium}
+    dev-trust-client-premium: ${SUBSCRIPTION_DEV_TRUST_CLIENT:false}
+  firebase:
+    project-id: ${FIREBASE_PROJECT_ID:}
+    service-account-path: ${FIREBASE_SERVICE_ACCOUNT_PATH:}
+    server-key: ${FIREBASE_SERVER_KEY:}
 
 jwt:
   access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION:900000}

@@ -35,6 +35,7 @@ public class InvoiceService {
     private final UserRepository userRepository;
     private final ClassificationService classificationService;
     private final EntityManager entityManager;
+    private final AlertPushService alertPushService;
 
     @Transactional(readOnly = true)
     public Page<InvoiceResponse> findAllByUserId(UUID userId, Pageable pageable) {
@@ -149,6 +150,14 @@ public class InvoiceService {
                 failed += 1;
             }
             results.add(resultBuilder.build());
+        }
+
+        if (synced > 0) {
+            try {
+                alertPushService.evaluateAndNotify(userId);
+            } catch (Exception exception) {
+                // Ne pas faire échouer la sync si l'envoi push échoue
+            }
         }
 
         return SyncResponse.builder()

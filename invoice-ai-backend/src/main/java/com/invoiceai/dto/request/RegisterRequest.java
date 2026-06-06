@@ -1,6 +1,8 @@
 package com.invoiceai.dto.request;
 
+import com.invoiceai.dto.request.DeviceInfoRequest;
 import com.invoiceai.validation.PasswordPolicy;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -37,6 +39,9 @@ public class RegisterRequest {
     }
 
     private Boolean acceptedPrivacyPolicy;
+
+    @Valid
+    private DeviceInfoRequest device;
 }
 
 
